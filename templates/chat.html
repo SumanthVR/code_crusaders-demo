@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinWise Chat - Your AI Financial Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body class="chat-page">
+    <header class="chat-header">
+        <div class="container">
+            <div class="logo">
+                <a href="/">
+                    <h1>FinWise</h1>
+                </a>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/learn">Learning Center</a></li>
+                    <li><a href="/tools">Financial Tools</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="chat-main">
+        <div class="container">
+            <div class="sidebar">
+                <div class="sidebar-header">
+                    <h3>Topics</h3>
+                </div>
+                <div class="topic-list">
+                    <button class="topic-btn active">All Conversations</button>
+                    <button class="topic-btn">Investment Basics</button>
+                    <button class="topic-btn">Mutual Funds</button>
+                    <button class="topic-btn">Stock Market</button>
+                    <button class="topic-btn">Tax Planning</button>
+                    <button class="topic-btn">Retirement</button>
+                </div>
+                <div class="sidebar-header">
+                    <h3>Tools</h3>
+                </div>
+                <div class="tools-list">
+                    <button class="tool-btn" id="risk-profile-btn">Risk Profile Assessment</button>
+                    <button class="tool-btn" id="investment-finder-btn">Investment Finder</button>
+                    <button class="tool-btn" id="sip-calculator-btn">SIP Calculator</button>
+                </div>
+            </div>
+            
+            <div class="chat-container">
+                <div class="chat-header">
+                    <h2>Chat with FinWise</h2>
+                </div>
+                <div id="chat-messages" class="chat-messages">
+                    <div class="message bot">
+                        <div class="avatar bot-avatar">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="24" height="24" rx="12" fill="#4F46E5"/>
+                                <path d="M16.5 8.5C16.5 9.88071 15.3807 11 14 11C12.6193 11 11.5 9.88071 11.5 8.5C11.5 7.11929 12.6193 6 14 6C15.3807 6 16.5 7.11929 16.5 8.5Z" fill="white"/>
+                                <path d="M9.5 9.5C9.5 10.3284 8.82843 11 8 11C7.17157 11 6.5 10.3284 6.5 9.5C6.5 8.67157 7.17157 8 8 8C8.82843 8 9.5 8.67157 9.5 9.5Z" fill="white"/>
+                                <path d="M16 14C16 14 15.5 17 12 17C8.5 17 8 14 8 14" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <div class="message-content">
+                            <p>Hi, I'm FinWise, your financial assistant. How can I help you with your investment questions today?</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="chat-input-container">
+                    <div class="input-wrapper">
+                        <input type="text" id="user-message" placeholder="Ask me about investing, financial planning, market trends...">
+                        <button id="send-button">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M22 2L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="input-features">
+                        <button id="voice-input-btn" title="Voice Input">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M19 10v2a7 7 0 0 1-14 0v-2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <line x1="12" y1="19" x2="12" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <line x1="8" y1="23" x2="16" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                        <button id="upload-btn" title="Upload Document">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <polyline points="17 8 12 3 7 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <line x1="12" y1="3" x2="12" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Risk Assessment Modal -->
+    <div id="risk-assessment-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Risk Profile Assessment</h2>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p>Answer these questions to help determine your investment risk profile.</p>
+                <form id="risk-assessment-form">
+                    <div class="question">
+                        <label>1. What is your primary investment goal?</label>
+                        <div class="options">
+                            <label><input type="radio" name="goal" value="preservation"> Capital preservation</label>
+                            <label><input type="radio" name="goal" value="income"> Regular income</label>
+                            <label><input type="radio" name="goal" value="balanced"> Balanced growth and income</label>
+                            <label><input type="radio" name="goal" value="growth"> Long-term growth</label>
+                            <label><input type="radio" name="goal" value="aggressive"> Maximum growth</label>
+                        </div>
+                    </div>
+                    <div class="question">
+                        <label>2. What is your investment time horizon?</label>
+                        <div class="options">
+                            <label><input type="radio" name="horizon" value="short"> Less than 3 years</label>
+                            <label><input type="radio" name="horizon" value="medium"> 3-5 years</label>
+                            <label><input type="radio" name="horizon" value="long"> 5-10 years</label>
+                            <label><input type="radio" name="horizon" value="very_long"> More than 10 years</label>
+                        </div>
+                    </div>
+                    <div class="question">
+                        <label>3. How would you react if your investment lost 20% of its value in a year?</label>
+                        <div class="options">
+                            <label><input type="radio" name="reaction" value="sell_all"> Sell all investments immediately</label>
+                            <label><input type="radio" name="reaction" value="sell_some"> Sell some investments</label>
+                            <label><input type="radio" name="reaction" value="do_nothing"> Do nothing</label>
+                            <label><input type="radio" name="reaction" value="buy_more"> Buy more at lower prices</label>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn primary">Get My Risk Profile</button>
+                </form>
+            </div>
+            <div id="risk-result" class="modal-result hidden">
+                <!-- Results will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Investment Finder Modal -->
+    <div id="investment-finder-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Investment Finder</h2>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p>Tell us about your investment goals to find suitable options.</p>
+                <form id="investment-finder-form">
+                    <div class="form-group">
+                        <label for="risk_profile">Risk Profile</label>
+                        <select id="risk_profile" name="risk_profile">
+                            <option value="conservative">Conservative</option>
+                            <option value="moderate" selected>Moderate</option>
+                            <option value="aggressive">Aggressive</option>
+                            <option value="very_aggressive">Very Aggressive</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="investment_horizon">Investment Horizon</label>
+                        <select id="investment_horizon" name="investment_horizon">
+                            <option value="short">Short-term (0-3 years)</option>
+                            <option value="medium" selected>Medium-term (3-7 years)</option>
+                            <option value="long">Long-term (7+ years)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="investment_amount">Investment Amount (₹)</label>
+                        <input type="number" id="investment_amount" name="amount" placeholder="e.g., 50000" min="1000">
+                    </div>
+                    <div class="form-group">
+                        <label for="goal">Financial Goal</label>
+                        <select id="goal" name="goal">
+                            <option value="wealth">Building Wealth</option>
+                            <option value="retirement">Retirement</option>
+                            <option value="education">Education</option>
+                            <option value="home">Home Purchase</option>
+                            <option value="emergency">Emergency Fund</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="product_type">Product Type (Optional)</label>
+                        <select id="product_type" name="product_type">
+                            <option value="">Any Product Type</option>
+                            <option value="Mutual Funds">Mutual Funds</option>
+                            <option value="Stocks">Stocks</option>
+                            <option value="ETFs">ETFs</option>
+                            <option value="Bonds">Bonds</option>
+                            <option value="Fixed Deposits">Fixed Deposits</option>
+                            <option value="Government Schemes">Government Schemes</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn primary">Find Investments</button>
+                </form>
+            </div>
+            <div id="investment-results" class="modal-result hidden">
+                <!-- Results will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Script resources -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/tools.js') }}"></script>
+</body>
+</html>
