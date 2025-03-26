@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
         try {
             loadingIndicator.style.display = "block"; // Show loading
 
-            const response = await fetch("http://127.0.0.1:5000/chat", {
+            const response = await fetch("https://code-crusaders-demo.onrender.com/chat", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ message: userMessage })
