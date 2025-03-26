@@ -92,4 +92,6 @@ def search_investments():
         return jsonify({'error': 'Failed to search for investments'}), 500
 
 if __name__ == '__main__':
-    app.run(debug=os.getenv("FLASK_ENV") == "development")
+    # app.run(debug=os.getenv("FLASK_ENV") == "development")
+    port = int(os.getenv("PORT", 5000))  # Default to 5000 if PORT is not set
+    app.run(host='0.0.0.0', port=port)
