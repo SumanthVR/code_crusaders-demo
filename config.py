@@ -2,6 +2,7 @@
 Configuration settings for the Financial Assistant application
 """
 import os
+import random
 from dotenv import load_dotenv
 
 # Load environment variables
@@ -10,6 +11,17 @@ load_dotenv()
 # Gemini API settings
 GEMINI_MODEL = "gemini-1.5-pro-latest"
 API_KEY = os.getenv("GOOGLE_API_KEY")
+
+# Response settings
+GREETING_RESPONSES = [
+    "Hello! How can I help with your financial questions today?",
+    "Hi there! What financial topics would you like to discuss?",
+    "Hey! I'm ready to assist with your investment questions.",
+    "Greetings! Ask me anything about personal finance."
+]
+
+MAX_RESPONSE_TOKENS = 500  # Normal responses
+SHORT_RESPONSE_TOKENS = 50  # For simple non-greeting messages
 
 # Financial data settings
 DEFAULT_MARKET = "NSE"  # National Stock Exchange (India)
