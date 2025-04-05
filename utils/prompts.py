@@ -13,6 +13,16 @@ def get_financial_prompt(user_query, financial_data=None):
     Returns:
         str: The formatted prompt
     """
+    # First check for simple greetings/short messages
+    simple_phrases = ["hi", "hello", "hey", "good morning", 
+                     "good afternoon", "good evening", 
+                     "thanks", "thank you", "ok", "okay"]
+    
+    if (len(user_query.split()) <= 3 and 
+        any(phrase in user_query.lower() for phrase in simple_phrases)):
+        return f"""Respond briefly (1 sentence maximum) to this greeting:
+        {user_query}"""
+
     base_prompt = """
 You are a helpful and knowledgeable financial assistant for Indian investors. Your goal is to help users understand financial concepts, make informed investment decisions, and improve their financial literacy. Focus on providing accurate, educational information that is relevant to the Indian financial market.
 
