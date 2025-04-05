@@ -1,6 +1,6 @@
 import google.generativeai as genai
 import logging
-from config import GEMINI_MODEL
+from config import GEMINI_MODEL, MAX_RESPONSE_TOKENS, SHORT_RESPONSE_TOKENS
 
 # Set up logging
 logging.basicConfig(level=logging.DEBUG)
@@ -46,11 +46,16 @@ class GeminiService:
                     "temperature": 0.2,
                     "top_p": 0.95,
                     "top_k": 40,
+                    "max_output_tokens": MAX_RESPONSE_TOKENS
                 }
             )
             logger.info("✅ Chat session started!")
         except Exception as e:
             logger.error(f"⚠️ Error starting chat session: {str(e)}")
+
+    def _is_simple_prompt(self, prompt):
+        """Check if prompt is a simple greeting/short message"""
+        return len(prompt.split('\n')) <= 3 and "Respond briefly" in prompt
 
     def generate_response(self, prompt):
         """Generate a response from the model using the provided prompt"""
@@ -60,8 +65,22 @@ class GeminiService:
 
             logger.debug(f"📝 Prompt sent to Gemini: {prompt}")
 
+            # Determine response length based on prompt type
+            generation_config = {
+                "temperature": 0.2,
+                "top_p": 0.95,
+                "top_k": 40,
+                "max_output_tokens": (
+                    SHORT_RESPONSE_TOKENS if self._is_simple_prompt(prompt) 
+                    else MAX_RESPONSE_TOKENS
+                )
+            }
+
             # Generate the response
-            response = self.model.generate_content(prompt)
+            response = self.model.generate_content(
+                prompt,
+                generation_config=generation_config
+            )
 
             if response and hasattr(response, "text"):
                 logger.debug(f"🤖 Gemini response: {response.text}")
@@ -81,7 +100,17 @@ class GeminiService:
                 raise ValueError("🚨 Gemini model is not initialized!")
 
             logger.debug(f"📝 Direct Prompt: {prompt}")
-            response = self.model.generate_content(prompt)
+            
+            # Use default length for direct responses
+            response = self.model.generate_content(
+                prompt,
+                generation_config={
+                    "temperature": 0.2,
+                    "top_p": 0.95,
+                    "top_k": 40,
+                    "max_output_tokens": MAX_RESPONSE_TOKENS
+                }
+            )
 
             if response and hasattr(response, "text"):
                 logger.debug(f"🤖 Direct AI Response: {response.text}")
